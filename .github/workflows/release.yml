@@ -1,5 +1,4 @@
 # name: 'C++ CI'
-
 on:
   push:
     branches:
@@ -26,7 +25,8 @@ jobs:
       - name: Configure CMake
         run: | 
           cd ./build
-          cmake ../01_Homework -DPATCH_VERSION=${{ github.run_number }}
+          # cmake ../01_Homework -DPATCH_VERSION=${{ github.run_number }}
+          cmake ../02_Homework -DPATCH_VERSION=${{ github.run_number }}
       
       - name: Build  
         run: |
