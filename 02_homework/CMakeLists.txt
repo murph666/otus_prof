@@ -13,6 +13,16 @@ add_executable(ip_filter ip_filter.cpp)
 add_library(tools tools.cpp tools.h)
 target_link_libraries(ip_filter PRIVATE tools)
 
+set_target_properties(ip_filter tools PROPERTIES
+    CXX_STANDARD 14
+    CXX_STANDARD_REQUIRED ON
+)
+target_include_directories(ip_filter
+    PRIVATE "${CMAKE_BINARY_DIR}"
+)
+target_link_libraries(ip_filter PRIVATE
+    tools
+)
 
 target_compile_options(ip_filter PRIVATE
 -Wall -Wextra -pedantic -Werror

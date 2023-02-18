@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "version.h"
 
 struct filter_mask{
     int16_t oct1 = -1;

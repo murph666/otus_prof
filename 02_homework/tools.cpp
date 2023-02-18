@@ -1,7 +1,10 @@
 #include "tools.h"
-int version() {
+
+int version()
+{
     return PROJECT_VERSION_PATCH;
 }
+
 std::vector<std::string> split(const std::string &str, char d)
 {
     std::vector<std::string> r;
@@ -115,7 +118,7 @@ std::vector<uint32_t> filterIPv4(std::vector<uint32_t> &pool, filter_mask filter
     for (auto el : pool)
     {
         uint16_t count = 0;
-        
+
         if ((filter.oct1 >= 0) && (static_cast<uint16_t>(el >> 24) == filter.oct1))
             count++;
         if ((filter.oct2 >= 0) && (static_cast<uint16_t>(el >> 16 & 0xff) == filter.oct2))
@@ -134,7 +137,8 @@ std::vector<uint32_t> filterIPv4(std::vector<uint32_t> &pool, filter_mask filter
     return filtered;
 }
 
-std::vector<uint32_t> filterIPv4_any(std::vector<uint32_t> &pool, const uint16_t& filter){
+std::vector<uint32_t> filterIPv4_any(std::vector<uint32_t> &pool, const uint16_t &filter)
+{
     std::vector<uint32_t> filtered;
     for (auto el : pool)
     {
