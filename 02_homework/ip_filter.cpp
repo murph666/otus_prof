@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <fstream>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include "tools.h"
 
 #define UNUSED(variable) (void)variable
@@ -48,7 +49,7 @@ int main(int argc, char const *argv[])
     // int f;
     // std::cout << "Enter the file number: ";
     // std::cin >> f;
-
+    std::cout <<argv[1] <<std::endl;
     file = std::ifstream(argv[1]);
 
     std::string line;
