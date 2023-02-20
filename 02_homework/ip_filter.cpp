@@ -65,6 +65,12 @@ int main(int argc, char const *argv[])
 
         file.close();
     }
+    else
+    {
+        std::cerr << "Failed to open file " << argv[1] << '\n';
+        return 0;
+    }
+    
 
     sort_pool(ip_pool, 0, ip_pool.size() - 1);
 
