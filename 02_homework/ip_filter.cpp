@@ -10,7 +10,7 @@
 #include <sys/stat.h>
 #include "tools.h"
 
-int main(int argc, char const *argv[])
+int main()
 {
     char cwd[1024];
     std::map<int, std::string> fileboard;
@@ -25,8 +25,6 @@ int main(int argc, char const *argv[])
         std::cout << "Error getting current directory!" << std::endl;
     }
 
-    struct dirent *dp;
-    struct stat info;
     short num = 0;
 
     for (const auto &entry : std::filesystem::directory_iterator(".."))

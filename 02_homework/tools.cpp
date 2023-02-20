@@ -1,4 +1,5 @@
 #include "tools.h"
+#include "version.h"
 
 int version()
 {
