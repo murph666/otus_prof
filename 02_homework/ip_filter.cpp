@@ -49,28 +49,28 @@ int main(int argc, char const *argv[])
     // int f;
     // std::cout << "Enter the file number: ";
     // std::cin >> f;
-    std::cout <<argv[1] <<std::endl;
+
     file = std::ifstream(argv[1]);
 
     std::string line;
     std::vector<uint32_t> ip_pool;
     
-    if (file.is_open())
-    {
-        for (std::string line; std::getline(file, line);)
+    // if (file.is_open())
+    // {
+        for (std::string line; std::getline(std::cin, line);)
         {
             std::vector<std::string> v = split(split(line, '\t').at(0), '.');
             uint32_t i = strIP2uint(v);
             ip_pool.push_back(i);
         }
 
-        file.close();
-    }
-    else
-    {
-        std::cerr << "Failed to open file " << argv[1] << '\n';
-        return 0;
-    }
+    //     file.close();
+    // }
+    // else
+    // {
+    //     std::cerr << "Failed to open file " << argv[1] << '\n';
+    //     return 0;
+    // }
     
 
     sort_pool(ip_pool, 0, ip_pool.size() - 1);
