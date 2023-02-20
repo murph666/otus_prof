@@ -10,42 +10,46 @@
 #include <sys/stat.h>
 #include "tools.h"
 
-int main()
+#define UNUSED(variable) (void)variable
+
+int main(int argc, char const *argv[])
 {
-    char cwd[1024];
-    std::map<int, std::string> fileboard;
+    UNUSED(argc);
+    // char cwd[1024];
+    // std::map<int, std::string> fileboard;
     std::ifstream file;
 
-    if (getcwd(cwd, 1024) != NULL)
-    {
-        std::cout << "Current working directory: " << cwd << std::endl;
-    }
-    else
-    {
-        std::cout << "Error getting current directory!" << std::endl;
-    }
+    // if (getcwd(cwd, 1024) != NULL)
+    // {
+    //     std::cout << "Current working directory: " << cwd << std::endl;
+    // }
+    // else
+    // {
+    //     std::cout << "Error getting current directory!" << std::endl;
+    // }
 
-    short num = 0;
+    // short num = 0;
 
-    for (const auto &entry : std::filesystem::directory_iterator(".."))
-    {
-        std::string filename = entry.path().filename();
-        std::string extension = filename.substr(filename.rfind(".") + 1);
-        if (extension == "tsv")
-        {
-            fileboard.insert(std::pair<int, std::string>(num, filename));
-            num++;
-        }
-    }
+    // for (const auto &entry : std::filesystem::directory_iterator(".."))
+    // {
+    //     std::string filename = entry.path().filename();
+    //     std::string extension = filename.substr(filename.rfind(".") + 1);
+    //     if (extension == "tsv")
+    //     {
+    //         fileboard.insert(std::pair<int, std::string>(num, filename));
+    //         num++;
+    //     }
+    // }
 
-    std::cout << "List of files: " << std::endl;
-    for (const auto &v : fileboard)
-        std::cout << v.first << ". " << v.second << std::endl;
+    // std::cout << "List of files: " << std::endl;
+    // for (const auto &v : fileboard)
+    //     std::cout << v.first << ". " << v.second << std::endl;
 
-    int f;
-    std::cout << "Enter the file number: ";
-    std::cin >> f;
-    file = std::ifstream("../" + fileboard.at(f));
+    // int f;
+    // std::cout << "Enter the file number: ";
+    // std::cin >> f;
+
+    file = std::ifstream(argv[1]);
 
     std::string line;
     std::vector<uint32_t> ip_pool;
