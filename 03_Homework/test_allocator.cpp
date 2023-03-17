@@ -28,7 +28,7 @@ void test_map_allocator()
 {
     std::cout << "test_map_allocator" << std::endl;
     std::map<int, int, std::less<int>, CustomAllocator<std::pair<const int, int>>> test_map_allocator;
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < 6; ++i)
     {
         test_map_allocator[i] = factorial(i);
     }

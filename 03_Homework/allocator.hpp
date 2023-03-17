@@ -29,14 +29,16 @@ struct MemoryChunk
     MemoryChunk<T> *next_chank = nullptr;
 
     MemoryChunk() : memory_ptr{nullptr},
-                    end_memory_ptr{nullptr}, size{0}, occupied{0}, released{0} {};
+                    end_memory_ptr{nullptr}, size{0}, occupied{0}, released{0} {
+                        std::cout << "MemoryChunk default constructor."<< sizeof(T) << std::endl;
+                    };
 
     void *allocate_block(const size_t &items_number)
     {
 #ifdef USE_PRETTY
         std::cout << __PRETTY_FUNCTION__ << std::endl;
 #endif
-        memory_ptr = static_cast<T *>(malloc(items_number * sizeof(T)));
+        memory_ptr = std::malloc(items_number * sizeof(T));
         std::cout << memory_ptr << std::endl;
         if (!memory_ptr)
             return nullptr;
@@ -54,10 +56,11 @@ struct MemoryChunk
         return end_memory_ptr;
     }
 
-    bool free_block(void* p, const size_t &n)
+    bool free_block(void *p, const size_t &n)
     {
-        void *right_border = ((char*)memory_ptr) + size * sizeof(T);
-        if ((p >= memory_ptr) && (p < right_border)) return false;
+        void *right_border = ((char *)memory_ptr) + size * sizeof(T);
+        if ((p >= memory_ptr) && (p < right_border))
+            return false;
 
         released += n;
         if (released == occupied)
@@ -113,7 +116,8 @@ struct CustomAllocator
     pointer allocate(size_type n)
     {
 #ifdef USE_PRETTY
-        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        std::cout << std::endl
+                  << __PRETTY_FUNCTION__ << " " << n << " +++" << std::endl;
 #endif
         size_t block_number = (n < items_per_block) ? items_per_block : n;
         if (!first_memory_chunk)
@@ -154,9 +158,11 @@ struct CustomAllocator
         }
 
         ptrChunk tempChunk = nullptr;
-        while (first_memory_chunk != nullptr){
+        while (first_memory_chunk != nullptr)
+        {
             tempChunk = first_memory_chunk->next_chank;
-            if (first_memory_chunk->free_block(ptr, n)) break;
+            if (first_memory_chunk->free_block(ptr, n))
+                break;
             first_memory_chunk = tempChunk;
         }
         delete tempChunk;
