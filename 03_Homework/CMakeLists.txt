@@ -9,7 +9,7 @@ project(03_Homework
 
 configure_file(version.h.in version.h)
 
-add_executable(main main.cpp one_way_list_container.hpp allocator.hpp)
+add_executable(main main.cpp one_way_list_container.hpp allocator.hpp logging_allocator.cpp)
 add_library(test_allocator test_allocator.cpp)
 
 
