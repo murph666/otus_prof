@@ -8,7 +8,8 @@ int main()
 	std::cout << "PID процесса: " << getpid() << std::endl;
 	test_map_std_allocator();
 	test_map_allocator();
-	test_container_std_allocator();
+	
 	test_container_allocator();
+	test_container_std_allocator();
 	return 0;
 }

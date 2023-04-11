@@ -3,26 +3,37 @@
 #include <iostream>
 
 // Базовый узел - элемент
-template <class T>
-struct Node
-{
-    Node() : next{nullptr} {}
-    explicit Node(const T &value) : next{nullptr}, data{value} {}
+// template <class T>
 
-    T data;     // данные
-    Node *next; // следующий элемент
-};
 
-template <typename T>
+template <typename T, class Allocator = std::allocator<T>>
 class OneWayList
 {
+private:
+    struct Node
+        {
+            Node() : next{nullptr} {}
+            explicit Node(const T &value) : data{value}, next{nullptr} {}
+
+            T data;     // данные
+            Node *next; // следующий элемент
+        };
+
+    Node *begin_node;           // указатель на начало списка
+    Node *end_node;             // указатель на конец списка
+    unsigned int total_number;  // количество элементов в списке
+
 public:
+    using node_alloc = typename std::allocator_traits<Allocator>::template rebind_alloc<Node>;
+    node_alloc allocator;
+    // typename std::allocator_traits<Allocator>::template rebind_alloc<Node<T>> allocator;
+
     struct Iterator
     {
         Iterator() : iter_node{nullptr} {}
-        explicit Iterator(Node<T> *new_iter_ptr) : iter_node{new_iter_ptr} {}
+        explicit Iterator(Node *new_iter_ptr) : iter_node{new_iter_ptr} {}
 
-        Node<T> *operator++()
+        Node *operator++()
         {
             iter_node = iter_node->next;
             return iter_node;
@@ -43,7 +54,7 @@ public:
         }
 
     private:
-        Node<T> *iter_node;
+        Node *iter_node;
     };
 
     OneWayList() : begin_node{nullptr}, end_node{nullptr}, total_number{0}
@@ -51,44 +62,55 @@ public:
         std::cout << "OneWayList Container default constructor" << std::endl;
     }
 
-    // ~OneWayList()
-    // {
-    //     if (total_number != 0)
-    //     {
-    //         begin_node = nullptr;
-    //         end_node = nullptr;
-    //         total_number = 0;
-    //     }
-    // }
+    ~OneWayList()
+    {
+        Node* current_node_ptr = begin_node;
+		Node* next_to_delete_node_ptr = nullptr;
+
+		while (current_node_ptr != nullptr) {
+			next_to_delete_node_ptr = current_node_ptr->next;
+			allocator.deallocate(current_node_ptr, 1);
+			current_node_ptr = next_to_delete_node_ptr;
+		}
+
+		begin_node = end_node = nullptr;
+		total_number = 0;
+
+    }
 
     int size() { return total_number; }
 
+    // void destroyNode(Node *node)
+    // {
+    //     allocator.destroy(node);
+    //     allocator.deallocate(node, 1);
+    // }
+
     void push_back(const T &value)
     {
-        //Создаем новую ноду
-        Node<T> *new_value = new Node<T>;
-        new_value->data = value;
-        new_value->next = nullptr;
-        //Если пустой -> новая нода будет начальной
+        // Создаем новую ноду
+        Node *new_value = allocator.allocate(1);
+        allocator.construct(new_value, value);
+        // new_value->next = nullptr;
+        // Если пустой -> новая нода будет начальной
         if (total_number == 0)
         {
             begin_node = end_node = new_value;
-            total_number++;
         }
-        //Если нет, то новая нода становится последней
+        // // Если нет, то новая нода становится последней
         else
         {
             end_node->next = new_value;
             end_node = new_value;
-            total_number++;
         }
+            total_number++;
     }
 
-    Node<T> *move(const unsigned int position)
+    Node *move(const unsigned int position)
     {
         if (total_number > 0)
         {
-            Node<T> *temp_node = begin_node;
+            Node *temp_node = begin_node;
             for (unsigned int i = 0; i < position; i++)
             {
                 temp_node = temp_node->next;
@@ -102,15 +124,15 @@ public:
     {
         if (position != 0)
         {
-            Node<T> *del_node = move(position);
-            Node<T> *prev_del_node = move(position - 1);
+            Node *del_node = move(position);
+            Node *prev_del_node = move(position - 1);
 
             prev_del_node->next = del_node->next;
             delete del_node;
         }
         else
         {
-            Node<T> *del_node = begin_node;
+            Node *del_node = begin_node;
             begin_node = del_node->next;
             delete del_node;
         }
@@ -125,17 +147,17 @@ public:
         }
         else if (position == 0)
         {
-            Node<T> *new_node = new Node<T>;
+            Node *new_node = new Node;
             new_node->data = value;
             new_node->next = begin_node;
             begin_node = new_node;
             total_number++;
         }
-        
+
         else
         {
-            Node<T> *new_node = new Node<T>;
-            Node<T> *insert_node = move(position - 1);
+            Node *new_node = new Node;
+            Node *insert_node = move(position - 1);
 
             new_node->data = value;
             new_node->next = insert_node->next;
@@ -147,7 +169,7 @@ public:
 
     T &operator[](const unsigned int place)
     {
-        Node<T> *temp_node = move(place);
+        Node *temp_node = move(place);
         return temp_node->data;
     }
 
@@ -179,15 +201,10 @@ public:
             return Iterator(nullptr);
         }
     }
-
-private:
-    Node<T> *begin_node;       // указатель на начало списка
-    Node<T> *end_node;         // указатель на конец списка
-    unsigned int total_number; // количество элементов в списке
 };
 
-template <typename T>
-std::ostream &operator<<(std::ostream &os, const OneWayList<T> &container)
+template <typename T, class Allocator>
+std::ostream &operator<<(std::ostream &os, const OneWayList<T, Allocator> &container)
 {
     for (auto iter = container.begin(); iter != container.end(); ++iter)
     {

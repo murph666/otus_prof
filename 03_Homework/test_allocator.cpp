@@ -1,6 +1,7 @@
 #include "test_allocator.hpp"
 #include "logging_allocator.cpp"
 #include "allocator.hpp"
+#include "one_way_list_container.hpp"
 #include <map>
 #include <iostream>
 
@@ -44,14 +45,24 @@ void test_map_allocator()
 void test_container_allocator()
 {
     std::cout << "test_container_allocator" << std::endl;
-
-    
+    // OneWayList<int, logging_allocator<int>> OneWayList_container;
+    OneWayList<int, CustomAllocator<int>> OneWayList_container;
+	for (int i = 0; i < 10; ++i)
+	{
+		OneWayList_container.push_back(factorial(i));
+	}
+    std::cout << OneWayList_container << std::endl;
     std::cout << std::endl;
 }
 void test_container_std_allocator()
 {
     std::cout << "test_container_std_allocator" << std::endl;
-
-
+    OneWayList<int> OneWayList_def_container;
+	for (int i = 0; i < 10; ++i)
+	{
+		OneWayList_def_container.push_back(factorial(i));
+	}
+    
+    std::cout << OneWayList_def_container << std::endl;
     std::cout << std::endl;
 }
