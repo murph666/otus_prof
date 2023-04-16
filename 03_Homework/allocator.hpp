@@ -133,7 +133,6 @@ struct CustomAllocator
     ~CustomAllocator()
     {
         std::cout << "Allocator destructor" << std::endl;
-
     }
 
     pointer allocate(size_type n)
@@ -200,7 +199,11 @@ struct CustomAllocator
         if (curr_chunk->memory_ptr == nullptr)
         {
             if (first_memory_chunk->memory_ptr != nullptr)
+            {
                 prev_chunk->next_chank = nullptr;
+                
+            }
+            else first_memory_chunk = curr_chunk->next_chank;
             delete curr_chunk;
         }
     }

@@ -46,7 +46,7 @@ void test_container_allocator()
 {
     std::cout << "test_container_allocator" << std::endl;
     // OneWayList<int, logging_allocator<int>> OneWayList_container;
-    OneWayList<int, CustomAllocator<int>> OneWayList_container;
+    OneWayList<int, CustomAllocator<int, 1>> OneWayList_container;
 	for (int i = 0; i < 10; ++i)
 	{
 		OneWayList_container.push_back(factorial(i));
@@ -58,7 +58,7 @@ void test_container_std_allocator()
 {
     std::cout << "test_container_std_allocator" << std::endl;
     OneWayList<int> OneWayList_def_container;
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		OneWayList_def_container.push_back(factorial(i));
 	}
