@@ -121,7 +121,7 @@ struct CustomAllocator
     template <typename U>
     struct rebind
     {
-        using other = CustomAllocator<U>;
+        using other = CustomAllocator<U, N>;
     };
 
     CustomAllocator()
@@ -163,12 +163,12 @@ struct CustomAllocator
             // return reinterpret_cast<pointer>(last_memory_chunk);
         }
 
-        first_memory_chunk->next_chank = allocate_new_block(block_number);
+        last_memory_chunk->next_chank = allocate_new_block(block_number);
         if (!last_memory_chunk->next_chank)
         {
             throw std::bad_alloc();
         }
-        last_memory_chunk = first_memory_chunk->next_chank;
+        last_memory_chunk = last_memory_chunk->next_chank;
         return reinterpret_cast<pointer>(last_memory_chunk->rezerve_block(n));
         // return reinterpret_cast<pointer>(last_memory_chunk);
     }
@@ -237,8 +237,8 @@ private:
     ptrChunk allocate_new_block(const size_t &items_number)
     {
         ptrChunk current_chunk = reinterpret_cast<ptrChunk>(new MemoryChunk<T>);
-        current_chunk->allocate_block(items_number);
-        if (!current_chunk)
+
+        if (!current_chunk->allocate_block(items_number))
         {
             delete current_chunk;
             return nullptr;
