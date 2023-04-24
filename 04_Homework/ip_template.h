@@ -7,10 +7,19 @@
 #include <tuple>
 #define UNUSED(x) (void)x;
 
-template<typename Integer,
-        std::enable_if_t<std::is_integral<Integer>::value, bool> = true>
-void print_ip(const Integer& integer){
-    std::cout << integer << std::endl;
+template<typename Arithmetic,
+        std::enable_if_t<std::is_integral<Arithmetic>::value, bool> = true>
+void print_ip(const Arithmetic& val){
+    size_t octets_number = sizeof(Arithmetic);
+    for (size_t i = octets_number; i--;)
+    {
+        std::cout << (val >> (i << 3) & 0xFF);
+        if (i > 0) {
+            std::cout << '.';
+        }
+    }
+
+    std::cout << std::endl;
 }
 
 template<typename String,
@@ -21,22 +30,32 @@ void print_ip(const String& string){
 
 template<template<typename, typename> class Container, typename T, typename Allocator,
         std::enable_if_t<std::is_same<Container<T, Allocator>, std::list<T>>::value
-        || std::is_same<Container<T, Allocator>, std::vector<T>>::value, bool> = true>
+        || std::is_same<Container<T, Allocator>, std::vector<T>>::value , bool> = true>
 void print_ip(const Container<T, Allocator>& container){
-    UNUSED(container)
-    std::cout << "list" << std::endl;
+    for (auto i:container) {
+        std::cout << i;
+        if (i != container.back())
+            std::cout << ".";
+    };
+    std::cout << std::endl;
 }
 
-template<typename Tuple, std::size_t I = 0>
-struct tuple_element_type {
-    using type = typename std::tuple_element<I, Tuple>::type;
+template <typename Tuple, std::size_t N>
+struct TuplePrinter {
+    static void print(const Tuple& t) {
+        TuplePrinter<Tuple, N-1>::print(t);
+        std::cout << "." << std::get<N-1>(t);
+    }
 };
 
+template <typename Tuple>
+struct TuplePrinter<Tuple, 1> {
+    static void print(const Tuple& t) {
+        std::cout << std::get<0>(t);
+    }
+};
 
-//TODO как то неоч выгляди для тюпла (по факту специализируем для всего чего угодно, в том числе и тьюпла
-// засунь суда мапу и бан
-template<typename... Args>
-void print_ip(std::tuple<Args...>){
-
-    std::cout << "tuple" << std::endl;
+template <typename ...T>
+void print_ip(const std::tuple<T...>&tuple){
+    TuplePrinter<decltype(tuple), sizeof...(T)>::print(tuple);
 }
