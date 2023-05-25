@@ -13,7 +13,7 @@ class Circle: public Figure{
 public:
     Circle(const Point& center, const uint32_t& radius, const uint32_t &id) :
             Figure(id), radius(radius), center(center) {}
-
+    ~Circle() = default;
 
     /**
     * @return Возвращает Point центра окружности.

@@ -5,7 +5,7 @@
 #include "lib.h"
 
 #include "gControl.h"
-#include "Models/documents_model.h"
+#include "dModel.h"
 
 #include "View/graphics_view.h"
 #include "View/documents_view.h"
@@ -21,8 +21,8 @@
 
 int main (int, char **) {
     // Ñîçäàåì ìîäåëè äàííûõ.
-    std::shared_ptr<GraphicsModel>  graphics_model  = std::make_shared<GraphicsModel>(100, 100);
-    std::shared_ptr<DocumentsModel> documents_model = std::make_shared<DocumentsModel>(graphics_model);
+    std::shared_ptr<gModel>  graphics_model  = std::make_shared<gModel>(200, 200);
+    std::shared_ptr<dModel> documents_model = std::make_shared<dModel>(graphics_model);
 
     // Ñîçäàåì êîíòðîëåðû.
     std::shared_ptr<gController>  graphics_controller  = std::make_shared<gController>(graphics_model);

@@ -11,7 +11,7 @@ public:
     explicit Point(int x, int y) : m_x(x), m_y(y) {}
 
     Point(const Point& point) : m_x(point.m_x), m_y(point.m_y) {}
-    Point operator=(Point& point){m_x = point.m_x; m_y = point.m_y;}
+
 
     /**
     * @return Устанавливает x координату Point.

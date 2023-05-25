@@ -19,7 +19,7 @@ public:
     ~gModel() = default;
 
     void add_figure(std::shared_ptr<Figure> &fig_id);
-    void del_figure(uint32_t &fig_id);
+    void del_figure(const uint32_t &fig_id);
     void clear_model(){m_figure.clear();};
 
     std::vector<std::shared_ptr<Figure>> get_graphic_objects() {return m_figure;}
