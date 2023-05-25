@@ -24,7 +24,7 @@ public:
 
     std::vector<std::shared_ptr<Figure>> get_graphic_objects() {return m_figure;}
 
-    uint32_t get_last_id() { return m_last_number;}
+    uint32_t get_last_id() const { return m_last_number;}
 
     void resize_scene(const uint32_t& w, const uint32_t& h) {
         m_width = w;

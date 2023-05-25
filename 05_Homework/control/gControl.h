@@ -10,6 +10,7 @@
 #include "line.h"
 #include "rectangle.h"
 #include "gModel.h"
+#include "gView.h"
 
 #include "memory"
 
@@ -17,21 +18,15 @@
 * @brief Контроллер по работе с графическими объектами.
 */
 
-class gController {
+class gControl {
 public:
-    gController() = default;
+    gControl() = default;
 
-    explicit gController(const std::shared_ptr<gModel>& gr_mdl) : m_graphics_model(gr_mdl) {
-        // Ñîçäàåì View è ïåðåäàåì åé óêàçàòåëü íà ìîäåëü ñ ãðàôèêîé.
-        graphics_view = std::make_shared<GraphicsView>(graphics_model);
-
-        // Ó ìîäåëè óêàçûâàåì View êàê îáîçðåâàòåëü.
-        m_graphics_model->attach(graphics_view);
+    explicit gControl(std::shared_ptr<gModel>& gmdl) : m_graphics_model(gmdl) {
+        m_graphics_view = std::make_shared<gView>(m_graphics_model);
     }
 
-    ~GraphicsController() {
-        graphics_model->detach(graphics_view);
-    }
+    ~gControl() = default;
 
 
     void create_dot(const Point& p1);
@@ -44,8 +39,12 @@ public:
 
     void delete_object(const uint32_t& figure_id);
 
+    std::shared_ptr<gView> get_view() {
+        return m_graphics_view;
+    }
+
 private:
-    std::shared_ptr<GraphicsView> graphics_view;
+    std::shared_ptr<gView> m_graphics_view;
     std::shared_ptr<gModel> m_graphics_model;
 };
 #endif //INC_04_HOMEWORK_GCONTROL_H

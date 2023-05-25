@@ -37,7 +37,6 @@ public:
 
     void clear() {
         documents.clear();
-        notify();
     }
 
     void output_info();

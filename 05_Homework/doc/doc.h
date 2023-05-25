@@ -11,9 +11,6 @@
 #include "fig.h"
 
 class Document {
-    using shared_document = std::shared_ptr<Document>;
-    using vector_document = std::vector<std::shared_ptr<Document>>;
-
 public:
     Document() : document_id("unknown") {}
 

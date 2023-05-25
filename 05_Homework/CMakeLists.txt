@@ -13,13 +13,16 @@ configure_file(version.h.in version.h)
 set(SOURCES main.cpp ${CMAKE_CURRENT_SOURCE_DIR}/control/gControl.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/models/gModel.h
                         ${CMAKE_CURRENT_SOURCE_DIR}/models/dModel.h
-                        ${CMAKE_CURRENT_SOURCE_DIR}/doc/doc.h)
+                        ${CMAKE_CURRENT_SOURCE_DIR}/doc/doc.h
+                        ${CMAKE_CURRENT_SOURCE_DIR}/view/gView.h
+                        ${CMAKE_CURRENT_SOURCE_DIR}/view/dView.h)
 add_executable(hm_exec ${SOURCES})
 add_library(lib_mvc lib.cpp)
 
 target_include_directories(hm_exec PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/control
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/models
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/view
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/graphic_primitive
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/doc)
 

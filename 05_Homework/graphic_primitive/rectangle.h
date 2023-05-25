@@ -9,8 +9,10 @@
 */
 class Rectangle : public Figure {
 public:
-    Rectangle(const Point& upperLeftP , const Point& bottomRightP, const uint32_t & id) :
+    Rectangle() = default;
+    explicit Rectangle(const Point& upperLeftP , const Point& bottomRightP, const uint32_t & id) :
             Figure(id), m_upperLeftP(upperLeftP), m_bottomRightP(bottomRightP) {}
+    ~Rectangle() = default;
 
     /**
     * @return Вовзращает левый верхний Point прямоугольника.
