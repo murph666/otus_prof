@@ -9,8 +9,7 @@ project(06_Homework
 
 #configure_file(version.h.in version.h)
 
-add_executable(06_Homework main.cpp matrix.h)
-#add_library(lib_matrix lib.cpp)
+add_executable(06_Homework main.cpp matrix.h cell.h)
 
 target_compile_options(06_Homework PRIVATE
         -Wall -Wextra -pedantic -Werror
@@ -19,9 +18,7 @@ target_compile_options(06_Homework PRIVATE
         -Wall -Wextra -pedantic -Werror
         )
 
-#target_link_libraries(06_Homework PRIVATE
-#        lib_matrix
-#        )
+
 
 install(TARGETS 06_Homework RUNTIME DESTINATION bin)
 

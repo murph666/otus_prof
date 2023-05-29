@@ -1,29 +1,32 @@
 //
 // Created by murph on 22.04.23.
 //
+#ifndef INC_06_HOMEWORK_MATRIX_H
+#define INC_06_HOMEWORK_MATRIX_H
+
+#include "cell.h"
 #include <iostream>
 #include <vector>
 #include <list>
 #include <tuple>
 #include <map>
-#include "cell.h"
-
 #define UNUSED(x) (void)x;
-//using coord = std::pair<int, int>;
 using coord = std::pair<int, int>;
 
-template<typename T, T default_val = 0>
-class Matrix {
-public:
-    using matrix_t = std::map<coord, Cell<T, default_val>>;
-    using matrix_iter = typename std::map<coord, Cell<T, default_val>>::iterator;
-    Matrix() = default;
+template<typename T, int default_val = 0>
+class RowMatrix;
 
+template<typename T, int default_val = 0>
+class Matrix {
+    using matrix_t = typename std::map<coord, Cell<T, default_val>>;
+    using matrix_iter = typename std::map<coord, Cell<T, default_val>>::iterator;
+public:
+    Matrix() = default;
     ~Matrix() = default;
 
-    Cell<T, default_val> operator[](int row){
-        return  RowMatrix<T, default_val>(this, row);
-    };
+    RowMatrix<T, default_val> operator[](int row){
+        return RowMatrix<T, default_val>(*this, row);
+    }
 
     matrix_t get_matrix() { return m_matrix; }
 
@@ -42,3 +45,24 @@ private:
     matrix_t m_matrix;
 
 };
+
+template<typename T, int default_val>
+class RowMatrix{
+public:
+    explicit RowMatrix(Matrix<T, default_val> &matrix, int row):
+            m_matrix(matrix), m_row(row){};
+
+    Cell<T, default_val>& operator[](int col){
+        auto it = m_matrix.find(std::make_pair(m_row, col));
+        if (it != m_matrix.end()){
+            it->second.set_pos(m_row, col);
+
+        }
+        return it->second;
+    };
+
+private:
+    Matrix<T, default_val> &m_matrix;
+    int m_row;
+};
+#endif
