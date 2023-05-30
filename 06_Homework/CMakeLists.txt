@@ -9,7 +9,7 @@ project(06_Homework
 
 #configure_file(version.h.in version.h)
 
-add_executable(06_Homework main.cpp matrix.h cell.h)
+add_executable(06_Homework main.cpp matrix.h)
 
 target_compile_options(06_Homework PRIVATE
         -Wall -Wextra -pedantic -Werror
