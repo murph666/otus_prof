@@ -12,6 +12,7 @@ template<typename T, int default_val = 0>
 class Cell{
 public:
     Cell() = default;
+    ~Cell() = default;
     explicit Cell(int v){
         m_value(v);
     }
@@ -23,7 +24,7 @@ public:
     Cell& operator=(int const& value) {
         coord position = std::make_pair(m_row, m_col);
 
-        if (value == default_value) {
+        if (value == default_val) {
             auto it = matrix.find(position);
 
             if (it != matrix.end()) {
@@ -38,7 +39,7 @@ public:
     }
 
     void set_pos(int x, int y){m_row = x; m_col = y;}
-    ~Cell() = default;
+
 private:
     int m_row{};
     int m_col{};
