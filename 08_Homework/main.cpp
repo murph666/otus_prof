@@ -1,6 +1,19 @@
-#include "Application.h"
+#include "options.h"
+#include "fs.h"
+#include "ds.h"
 
 int main(int argc, char* argv[]) {
-    auto app = Application(argc, argv);
-    return app.exec();
+
+    OptionsParser optionsParser;
+    auto options = optionsParser.GetOptions(argc, argv);
+    if (!options) {
+        return 0;
+    }
+
+    FileScanner fileScanner(options.get().excludePaths, options.get().levelScan, options.get().masks, options.get().minFileSize);
+    auto groupPath = fileScanner.Scan(options.get().includePaths);
+
+//    DuplicateScan dupScanner(options.get().blockSize, options.get().hash);
+//    auto duplicates = dupScanner.Scan(groupPath);
+
 }
