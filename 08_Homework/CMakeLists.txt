@@ -16,8 +16,11 @@ if (Boost_FOUND)
     message("boost lib=> ${Boost_LIBRARIES}")
     message("boost inc=> ${Boost_INCLUDE_DIR}")
 endif ()
-
-add_executable(08_Homework main.cpp Application.h Application.cpp)
+include_directories("include/")
+add_executable(08_Homework main.cpp
+        source/options.cpp
+        source/fs.cpp )
+#        source/ds.cpp)
 
 target_link_libraries(08_Homework Boost::filesystem
         Boost::program_options
