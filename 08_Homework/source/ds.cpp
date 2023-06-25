@@ -2,22 +2,25 @@
 // Created by murph on 17.06.23.
 //
 #include "ds.h"
+#include "fstream"
 
-DuplicateScan::DuplicateScan(boost::optional<size_t>& a_szBlockSize, boost::optional<std::string>& a_strHashAlg)
+#include "boost/crc.hpp"
+
+DuplicateScan::DuplicateScan(boost::optional<size_t>& arg_szBlockSize, boost::optional<std::string>& arg_strHashAlg)
 {
     m_szBlockSize = 1024;
-    if (a_szBlockSize) {
-        m_szBlockSize = a_szBlockSize.get();
+    if (arg_szBlockSize) {
+        m_szBlockSize = arg_szBlockSize.get();
     }
 
-    m_hashFunc = CreateHashFunc(a_strHashAlg);
+    m_hashFunc = CreateHashFunc(arg_strHashAlg);
 }
 
-PathGroupedByDup DuplicateScan::Scan(PathGroupedBySize a_groupPath)
+PathGroupedByDup DuplicateScan::Scan(PathGroupedBySize arg_groupPath)
 {
     PathGroupedByDup resultPaths;
 
-    for (const auto& group : a_groupPath) {
+    for (const auto& group : arg_groupPath) {
         auto findDuplicates = CheckPaths(group.second);
         auto pathGroupedByDup = FormGropByDuplicates(findDuplicates);
 
@@ -27,11 +30,11 @@ PathGroupedByDup DuplicateScan::Scan(PathGroupedBySize a_groupPath)
     return resultPaths;
 }
 
-PathGroupedForRead DuplicateScan::CheckPaths(const UniquePaths& a_paths)
+PathGroupedForRead DuplicateScan::CheckPaths(const UniquePaths& arg_paths)
 {
     PathGroupedForRead hashes;
 
-    for (const Path& path : a_paths) {
+    for (const Path& path : arg_paths) {
         std::string strPath = path.string();
         std::fstream read_stream(strPath, std::fstream::in);
         hashes[strPath] = std::make_pair(std::move(read_stream), 0);
@@ -76,19 +79,19 @@ PathGroupedForRead DuplicateScan::CheckPaths(const UniquePaths& a_paths)
     return hashes;
 }
 
-PathGroupedByDup DuplicateScan::FormGropByDuplicates(PathGroupedForRead& a_paths)
+PathGroupedByDup DuplicateScan::FormGropByDuplicates(PathGroupedForRead& arg_paths)
 {
     PathGroupedByDup result;
 
-    while (!a_paths.empty()) {
+    while (!arg_paths.empty()) {
         Paths paths;
 
-        std::size_t curHash = a_paths.begin()->second.second;
-        auto it = a_paths.begin();
-        while (it != a_paths.end()) {
+        std::size_t curHash = arg_paths.begin()->second.second;
+        auto it = arg_paths.begin();
+        while (it != arg_paths.end()) {
             if (it->second.second == curHash) {
                 paths.emplace_back(it->first);
-                it = a_paths.erase(it);
+                it = arg_paths.erase(it);
             }
             else {
                 ++it;
@@ -103,13 +106,13 @@ PathGroupedByDup DuplicateScan::FormGropByDuplicates(PathGroupedForRead& a_paths
     return result;
 }
 
-HashFunc_t DuplicateScan::CreateHashFunc(boost::optional<std::string>& a_strHashAlg)
+HashFunc_t DuplicateScan::CreateHashFunc(boost::optional<std::string>& arg_strHashAlg)
 {
-    if (a_strHashAlg) {
-        if (a_strHashAlg.get() == "crc16") {
+    if (arg_strHashAlg) {
+        if (arg_strHashAlg.get() == "crc16") {
             return HashFunc<boost::crc_16_type>();
         }
-        else if (a_strHashAlg.get() == "crc32") {
+        else if (arg_strHashAlg.get() == "crc32") {
             return HashFunc<boost::crc_32_type>();
         }
     }

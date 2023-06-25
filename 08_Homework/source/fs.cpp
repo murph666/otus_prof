@@ -4,26 +4,29 @@
 #include <iostream>
 #include "fs.h"
 
-FileScanner::FileScanner(const Paths& a_Excludes, boost::optional<std::size_t>& a_szLevel, std::vector<std::string> a_Masks, boost::optional<std::size_t>& a_szMinSize)
+FileScanner::FileScanner(const Paths& arg_Excludes,
+                         boost::optional<std::size_t>& arg_szLevel,
+                         std::vector<std::string> arg_masks,
+                         boost::optional<std::size_t>& arg_szMinSize)
 {
-    m_DirFilter = CreateDirFilter(a_szLevel, a_Excludes);
-    m_FileFilter = CreateFileFilter(a_szMinSize, a_Masks);
+    m_DirFilter = CreateDirFilter(arg_szLevel, arg_Excludes);
+    m_FileFilter = CreateFileFilter(arg_szMinSize, arg_masks);
 }
 
-PathGroupedBySize FileScanner::Scan(const Paths& a_Includes)
+PathGroupedBySize FileScanner::Scan(const Paths& arg_Includes)
 {
-    PathGroupedBySize groupPath = FindPath(a_Includes);
+    PathGroupedBySize groupPath = FindPath(arg_Includes);
     DeleteUniqPath(groupPath);
 
     return groupPath;
 }
 
-PathGroupedBySize FileScanner::FindPath(const Paths& a_Includes)
+PathGroupedBySize FileScanner::FindPath(const Paths& arg_includes)
 {
     PathGroupedBySize resultPaths;
 
     try {
-        for (auto& incPath : a_Includes) {
+        for (auto& incPath : arg_includes) {
             if (boost::filesystem::exists(incPath) && boost::filesystem::is_directory(incPath)) {
                 boost::filesystem::recursive_directory_iterator iter(incPath), end;
                 while (iter != end) {
@@ -43,8 +46,8 @@ PathGroupedBySize FileScanner::FindPath(const Paths& a_Includes)
 
                             if (m_FileFilter->IsValid(path) ) {
                                 std::size_t szSize = boost::filesystem::file_size(path);
-                                auto& uniquepaths = resultPaths[szSize];
-                                uniquepaths.insert(path);
+                                auto& uniquePaths = resultPaths[szSize];
+                                uniquePaths.insert(path);
                             }
                         }
                     }
@@ -65,13 +68,13 @@ PathGroupedBySize FileScanner::FindPath(const Paths& a_Includes)
     return resultPaths;
 }
 
-void FileScanner::DeleteUniqPath(PathGroupedBySize& a_groupPath)
+void FileScanner::DeleteUniqPath(PathGroupedBySize& arg_groupPath)
 {
-    auto it = a_groupPath.begin();
+    auto it = arg_groupPath.begin();
 
-    while(it != a_groupPath.end()) {
+    while(it != arg_groupPath.end()) {
         if (it->second.size() < 2) {
-            it = a_groupPath.erase(it);
+            it = arg_groupPath.erase(it);
         }
         else {
             ++it;
@@ -79,26 +82,27 @@ void FileScanner::DeleteUniqPath(PathGroupedBySize& a_groupPath)
     }
 }
 
-std::unique_ptr<DirFilter> FileScanner::CreateDirFilter(boost::optional<std::size_t>& a_szLevel, const Paths& a_Excludes)
+std::unique_ptr<DirFilter> FileScanner::CreateDirFilter(boost::optional<std::size_t>& arg_szLevel, const Paths& arg_Excludes)
 {
     std::size_t szLevel = 0;
-    if (a_szLevel) {
-        szLevel = a_szLevel.get();
+    if (arg_szLevel) {
+        szLevel = arg_szLevel.get();
     }
     auto levelFilter = std::make_unique<LevelDirFilter>(szLevel);
-    auto excludeFilter = std::make_shared<ExcludeDirFilter>(a_Excludes);
+    auto excludeFilter = std::make_shared<ExcludeDirFilter>(arg_Excludes);
     levelFilter->SetNext(excludeFilter);
     return levelFilter;
 }
 
-std::unique_ptr<FileFilter> FileScanner::CreateFileFilter(boost::optional<std::size_t>& a_szMinSize, const std::vector<std::string>& a_strMasks)
+std::unique_ptr<FileFilter> FileScanner::CreateFileFilter(boost::optional<std::size_t>& arg_szMinSize,
+                                                          const std::vector<std::string>& arg_strMasks)
 {
     std::size_t szMinSize = 1;
-    if (a_szMinSize) {
-        szMinSize = a_szMinSize.get();
+    if (arg_szMinSize) {
+        szMinSize = arg_szMinSize.get();
     }
     auto sizeFilter = std::make_unique<SizeFileFilter>(szMinSize);
-    auto masksFilter = std::make_shared<MasksFileFilter>(a_strMasks);
+    auto masksFilter = std::make_shared<MasksFileFilter>(arg_strMasks);
     sizeFilter->SetNext(masksFilter);
     return sizeFilter;
 }

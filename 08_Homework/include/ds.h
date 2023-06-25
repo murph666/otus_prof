@@ -15,15 +15,15 @@
 class DuplicateScan
 {
 public:
-    DuplicateScan(boost::optional<std::size_t>& a_szBlockSize, boost::optional<std::string>& a_strHashAlg);
+    DuplicateScan(boost::optional<std::size_t>& arg_szBlockSize, boost::optional<std::string>& arg_strHashAlg);
 
-    PathGroupedByDup Scan(PathGroupedBySize a_groupPath);
+    PathGroupedByDup Scan(PathGroupedBySize arg_groupPath);
 
 private:
-    PathGroupedForRead CheckPaths(const UniquePaths& a_paths);
-    PathGroupedByDup FormGropByDuplicates(PathGroupedForRead& a_paths);
+    PathGroupedForRead CheckPaths(const UniquePaths& arg_paths);
+    PathGroupedByDup FormGropByDuplicates(PathGroupedForRead& arg_paths);
 
-    static HashFunc_t CreateHashFunc(boost::optional<std::string>& a_strHashAlg);
+    static HashFunc_t CreateHashFunc(boost::optional<std::string>& arg_strHashAlg);
 
     template<typename T>
     static HashFunc_t HashFunc();
