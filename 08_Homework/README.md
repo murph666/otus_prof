@@ -13,5 +13,5 @@
 ### Examples: 
 **long options:**
 
-`08_Homework  --algorithm=crc32`
+`08_Homework <absolute_path> --algorithm=crc32`
 
