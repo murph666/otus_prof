@@ -12,10 +12,14 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include "logger.h"
 
 class cmd_parser {
 public:
-    explicit cmd_parser(std::stack<std::string> *arg_batch, const size_t arg_size):m_cmdBatch(arg_batch), m_batch_size(arg_size){};
+    explicit cmd_parser(std::stack<std::string> *arg_batch, const size_t arg_size) : m_cmdBatch(arg_batch),
+                                                                                     m_batch_size(arg_size) {
+
+    };
 
     void exec();
 
@@ -34,9 +38,9 @@ private:
             "EOF"
     };
 
-    static void print_result(const std::vector<std::string>& node) {
+    static void print_result(const std::vector<std::string> &node) {
         std::cout << "bulk:";
-        for (auto& i: node) {
+        for (auto &i: node) {
             std::cout << (i == *node.begin() ? " " : ", ") << i;
         }
         std::cout << std::endl;
@@ -46,6 +50,7 @@ private:
     size_t m_batch_size;
     std::stack<std::vector<std::string>> m_command_stack;
     std::vector<std::string> m_result;
+    Logger m_logger;
 };
 
 

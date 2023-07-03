@@ -25,6 +25,7 @@ void cmd_parser::exec() {
                 m_command_stack.pop();
             } else if (m_command_stack.size() == 1) {
                 print_result(cur);
+//                m_logger.writeLog(cur);
                 m_result.clear();
                 cur.clear();
             }
