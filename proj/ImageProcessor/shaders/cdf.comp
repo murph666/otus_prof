@@ -1,0 +1,20 @@
+#version 450
+
+layout(local_size_x = 32, local_size_y = 1, local_size_z = 1) in;
+layout(r32ui) uniform readonly uimage2D i_hist;
+layout(r32ui) uniform uimage2D i_cdf;
+
+void main()
+{
+    ivec2 pos = ivec2(gl_GlobalInvocationID.xy);
+    uvec4 add1 = imageLoad(i_hist, pos);
+
+    if (pos.x != 0)
+    {
+        add1 += imageLoad(i_hist, ivec2(pos.x - 1, pos.y));
+    }
+
+    imageAtomicAdd(i_cdf, pos.xy, add1.r);
+    imageAtomicAdd(i_cdf, pos.xy, add1.g);
+    imageAtomicAdd(i_cdf, pos.xy, add1.b);
+}

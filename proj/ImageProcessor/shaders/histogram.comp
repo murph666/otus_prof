@@ -1,0 +1,15 @@
+#version 450
+
+layout(local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
+layout(rgba32f) uniform readonly image2D i_in;
+layout(r32ui) uniform uimage2D i_out;
+
+void main()
+{
+    vec4 color = imageLoad(i_in, ivec2(gl_GlobalInvocationID.xy));
+    vec3 hist_value = round(color.rgb * 255.0);
+
+    imageAtomicAdd(i_out, ivec2(hist_value.r, 0), 1);
+    imageAtomicAdd(i_out, ivec2(hist_value.g, 1), 1);
+    imageAtomicAdd(i_out, ivec2(hist_value.b, 2), 1);
+}
