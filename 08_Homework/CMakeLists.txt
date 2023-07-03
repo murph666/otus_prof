@@ -19,7 +19,7 @@ endif ()
 include_directories("include/")
 add_executable(08_Homework main.cpp
         source/options.cpp
-        source/fs.cpp )
+        source/fs.cpp source/ds.cpp)
 #        source/ds.cpp)
 
 target_link_libraries(08_Homework Boost::filesystem
