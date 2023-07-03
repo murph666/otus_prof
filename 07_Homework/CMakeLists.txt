@@ -10,8 +10,8 @@ project(07_Homework VERSION ${PROJECT_VERSION})
 
 
 
-add_executable(07_Homework main.cpp lib.cpp)
-
+add_executable(07_Homework main.cpp lib.cpp source/cmd_parser.cpp)
+include_directories("include/")
 target_compile_options(07_Homework PRIVATE
         -Wall -Wextra -pedantic -Werror
         )
