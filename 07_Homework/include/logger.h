@@ -39,15 +39,17 @@ public:
         std::cout << "Текущее время в формате HHmmssddMMYYYY: " << currentTimeFormatted << std::endl;
         m_filename = std::string("log/log") + currentTimeFormatted;
         m_logfile.open(m_filename, std::ios::app);
+        std::cout << "bulk:";
         for (const auto& message : messages) {
             m_logfile << message << std::endl;
+            std::cout << (message == *messages.begin() ? " " : ", ") << message;
         }
         m_logfile.close();
     }
 
     static std::string getCurrentTimeFormatted() {
         auto currentTime = std::chrono::system_clock::now(); // Получение текущего времени
-        auto roundedTime = std::chrono::time_point_cast<std::chrono::seconds>(currentTime); // Округление времени до минут
+        auto roundedTime = std::chrono::time_point_cast<std::chrono::seconds>(currentTime); // Округление времени до секунд
 
         // Преобразование времени в строку с нужным форматом
         std::time_t currentTime_t = std::chrono::system_clock::to_time_t(roundedTime);
@@ -57,7 +59,6 @@ public:
 
         return oss.str();
     }
-
 
 private:
     std::ofstream m_logfile;

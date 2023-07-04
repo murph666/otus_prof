@@ -38,13 +38,7 @@ private:
             "EOF"
     };
 
-    static void print_result(const std::vector<std::string> &node) {
-        std::cout << "bulk:";
-        for (auto &i: node) {
-            std::cout << (i == *node.begin() ? " " : ", ") << i;
-        }
-        std::cout << std::endl;
-    }
+
 
     std::stack<std::string> *m_cmdBatch;
     size_t m_batch_size;
