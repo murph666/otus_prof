@@ -36,8 +36,9 @@ void cmd_parser::exec() {
         case CMD_LT_DYNAMIC_BLOCK_BEGIN: { /* return last result and push stack */
             auto& cur = m_command_stack.top();
             if (m_command_stack.size() == 1 && !cur.empty()) {
+                m_result.insert(m_result.end(), cur.begin(), cur.end());
                 Notify();
-                cur.clear();
+                m_result.clear();
             }
             m_command_stack.emplace();
             break;
@@ -48,8 +49,8 @@ void cmd_parser::exec() {
                 m_result.insert(m_result.end(), cur.begin(), cur.end());
                 m_command_stack.pop();
             }
-            Notify();
             if (m_command_stack.size() == 1) {
+                Notify();
                 m_result.clear();
                 m_command_stack.top().clear();
             }

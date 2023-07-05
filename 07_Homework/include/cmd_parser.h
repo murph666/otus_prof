@@ -29,7 +29,7 @@ public:
         m_list_observer.remove(observer);
     }
     void Notify() override {
-        std::list<IObserver *>::iterator iterator = m_list_observer.begin();
+        auto iterator = m_list_observer.begin();
         while (iterator != m_list_observer.end()) {
             (*iterator)->Update(m_result);
             ++iterator;

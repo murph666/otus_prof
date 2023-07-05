@@ -29,33 +29,15 @@ public:
     }
     void Update(const std::vector<std::string> &message_from_subject) override{
         std::string currentTimeFormatted = getCurrentTimeFormatted();
-        std::cout << "Текущее время в формате HHmmssddMMYYYY: " << currentTimeFormatted << std::endl;
         m_filename = std::string("log/log") + currentTimeFormatted;
         m_logfile.open(m_filename, std::ios::app);
         std::cout << "bulk:";
         for (const auto& message : message_from_subject) {
             m_logfile << message << std::endl;
             std::cout << (message == *message_from_subject.begin() ? " " : ", ") << message;
-        }
-        m_logfile.close();
-    }
 
-    void writeLog(const std::string& message) {
-        if (m_logfile.is_open()) {
-            m_logfile << message << std::endl;
         }
-    }
-
-    void writeLog(const std::vector<std::string>& messages) {
-        std::string currentTimeFormatted = getCurrentTimeFormatted();
-        std::cout << "Текущее время в формате HHmmssddMMYYYY: " << currentTimeFormatted << std::endl;
-        m_filename = std::string("log/log") + currentTimeFormatted;
-        m_logfile.open(m_filename, std::ios::app);
-        std::cout << "bulk:";
-        for (const auto& message : messages) {
-            m_logfile << message << std::endl;
-            std::cout << (message == *messages.begin() ? " " : ", ") << message;
-        }
+        std::cout << std::endl;
         m_logfile.close();
     }
 
