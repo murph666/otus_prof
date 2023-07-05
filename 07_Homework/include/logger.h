@@ -10,23 +10,35 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include "intent.h"
 
 #include <filesystem>
 
 
-class Logger {
+class Logger: public IObserver {
 public:
     Logger() {
         std::filesystem::path directoryPath("log");
         std::filesystem::create_directory(directoryPath);
     }
 
-    ~Logger() {
+    ~Logger() override {
         if (m_logfile.is_open()) {
             m_logfile.close();
         }
     }
-
+    void Update(const std::vector<std::string> &message_from_subject) override{
+        std::string currentTimeFormatted = getCurrentTimeFormatted();
+        std::cout << "Текущее время в формате HHmmssddMMYYYY: " << currentTimeFormatted << std::endl;
+        m_filename = std::string("log/log") + currentTimeFormatted;
+        m_logfile.open(m_filename, std::ios::app);
+        std::cout << "bulk:";
+        for (const auto& message : message_from_subject) {
+            m_logfile << message << std::endl;
+            std::cout << (message == *message_from_subject.begin() ? " " : ", ") << message;
+        }
+        m_logfile.close();
+    }
 
     void writeLog(const std::string& message) {
         if (m_logfile.is_open()) {

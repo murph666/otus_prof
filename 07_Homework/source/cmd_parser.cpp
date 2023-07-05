@@ -24,7 +24,8 @@ void cmd_parser::exec() {
                 m_result.insert(m_result.begin(), cur.begin(), cur.end());
                 m_command_stack.pop();
             } else if (m_command_stack.size() == 1) {
-                m_logger.writeLog(cur);
+//                m_logger.writeLog(cur);
+                Notify();
                 m_result.clear();
                 cur.clear();
             }
@@ -35,7 +36,7 @@ void cmd_parser::exec() {
         case CMD_LT_DYNAMIC_BLOCK_BEGIN: { /* return last result and push stack */
             auto& cur = m_command_stack.top();
             if (m_command_stack.size() == 1 && !cur.empty()) {
-                m_logger.writeLog(cur);
+                Notify();
                 cur.clear();
             }
             m_command_stack.emplace();
@@ -47,7 +48,7 @@ void cmd_parser::exec() {
                 m_result.insert(m_result.end(), cur.begin(), cur.end());
                 m_command_stack.pop();
             }
-            m_logger.writeLog(m_result);
+            Notify();
             if (m_command_stack.size() == 1) {
                 m_result.clear();
                 m_command_stack.top().clear();
@@ -61,7 +62,7 @@ void cmd_parser::exec() {
             } else if (m_command_stack.size() == 1) {
                 auto& cur = m_command_stack.top();
                 m_result.insert(m_result.end(), cur.begin(), cur.end());
-                m_logger.writeLog(m_result);
+                Notify();
                 m_result.clear();
                 cur.clear();
             }
