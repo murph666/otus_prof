@@ -31,13 +31,9 @@ public:
         std::string currentTimeFormatted = getCurrentTimeFormatted();
         m_filename = std::string("log/log") + currentTimeFormatted;
         m_logfile.open(m_filename, std::ios::app);
-        std::cout << "bulk:";
         for (const auto& message : message_from_subject) {
             m_logfile << message << std::endl;
-            std::cout << (message == *message_from_subject.begin() ? " " : ", ") << message;
-
         }
-        std::cout << std::endl;
         m_logfile.close();
     }
 

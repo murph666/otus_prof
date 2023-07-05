@@ -57,7 +57,6 @@ private:
     size_t m_batch_size;
     std::stack<std::vector<std::string>> m_command_stack;
     std::vector<std::string> m_result;
-    Logger m_logger;
 
     std::list<IObserver *> m_list_observer;
 
